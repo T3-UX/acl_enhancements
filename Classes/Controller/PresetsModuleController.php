@@ -29,6 +29,7 @@ use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Configuration\Features;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\AllowedMethodsTrait;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -58,6 +59,7 @@ class PresetsModuleController extends ActionController
         protected readonly YamlPermissionSetsWriter $defaultWriter,
         protected readonly Features $features,
         protected readonly PermissionSetMapperInterface $permissionSetMapper,
+        protected readonly ConnectionPool $connectionPool,
     ) {}
 
     protected function initializeAction(): void
@@ -321,8 +323,45 @@ class PresetsModuleController extends ActionController
         return $this->redirect('index');
     }
 
-    protected function renderBackendGroupPermissionPresetTca(int $uid = 0, string $presetIdentifier = '', string $returnUrl = '', string $actionName = 'savePreset'): string
+    public function viewAction(string $presetIdentifier = ''): ResponseInterface
     {
+        if ($presetIdentifier === '' || !$this->permissionSetsRegistry->has($presetIdentifier)) {
+            return $this->redirect('index');
+        }
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setTitle('ACL Presets – Permission set preview');
+
+        $buttonBar = $moduleTemplate->getDocHeaderComponent()->getButtonBar();
+
+        $buttonBar->addButton(
+            $buttonBar->makeLinkButton()
+                ->setTitle((string)LocalizationUtility::translate('LLL:EXT:acl_enhancements/Resources/Private/Language/locallang_tca.xlf:permissionSets.goBack'))
+                ->setShowLabelText(true)
+                ->setIcon($this->iconFactory->getIcon('actions-chevron-left', IconSize::SMALL))
+                ->setHref($this->uriBuilder->uriFor('index')),
+            ButtonBar::BUTTON_POSITION_LEFT,
+            0
+        );
+
+        $moduleTemplate->assignMultiple(
+            [
+                'content' => $this->renderBackendGroupPermissionPresetTca(presetIdentifier: $presetIdentifier, actionName: 'viewAction', readOnly: true),
+                'title' => 'Permission set preview',
+            ]
+        );
+
+        return $moduleTemplate->renderResponse('AclPresets/View');
+    }
+
+    protected function renderBackendGroupPermissionPresetTca(
+        int $uid = 0,
+        string $presetIdentifier = '',
+        string $returnUrl = '',
+        string $actionName = 'savePreset',
+        bool $readOnly = false
+    ): string {
+        $items = [];
         $formDataCompilerInput = [
             'request' => $this->request,
             'tableName' => 'be_groups',
@@ -353,6 +392,7 @@ class PresetsModuleController extends ActionController
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
                 label,
                 identifier,
+                usedIn,
             --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_groups.tabs.record_permissions,
                 pagetypes_select, tables_modify, non_exclude_fields, explicit_allowdeny, allowed_languages,
             --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_groups.tabs.module_permissions,
@@ -372,6 +412,22 @@ class PresetsModuleController extends ActionController
             'config' => [
                 'type' => 'input',
                 'eval' => 'trim',
+                'default' => YamlFileUtility::translateIdentifierToFilename($presetIdentifier),
+            ],
+        ];
+
+        $backendGroups = $this->findBeGroupsUsingPreset($presetIdentifier, ['uid', 'title']);
+
+        foreach ($backendGroups as $group) {
+            $items[] = ['label' => $group['title'], 'value' => $group['uid']];
+        }
+
+        $formData['processedTca']['columns']['usedIn'] = [
+            'label' => 'Used by following backend user groups:',
+            'config' => [
+                'type' => 'user',
+                'renderType' => 'presetUsedInField',
+                'items' => $items,
                 'default' => YamlFileUtility::translateIdentifierToFilename($presetIdentifier),
             ],
         ];
@@ -401,6 +457,12 @@ class PresetsModuleController extends ActionController
 
             if ($title === null) {
                 throw new \Exception('Backend usergroup not found');
+            }
+        }
+
+        if ($readOnly) {
+            foreach ($formData['processedTca']['columns'] as $key => $column) {
+                $formData['processedTca']['columns'][$key]['config']['readOnly'] = true;
             }
         }
 
@@ -457,6 +519,7 @@ class PresetsModuleController extends ActionController
 
         foreach ($this->permissionSetsRegistry as $permissionSet) {
             $tstamp = null;
+            $viewUrl = '';
             $editUrl = '';
             $deleteUrl = '';
             $downloadUrl = '';
@@ -497,6 +560,13 @@ class PresetsModuleController extends ActionController
                             'returnUrl' => $this->request->getUri(),
                         ]
                     );
+                    $viewUrl = $this->uriBuilder->uriFor(
+                        'view',
+                        [
+                            'presetIdentifier' => $permissionSet->permissionSet->getIdentifier(),
+                            'returnUrl' => $this->request->getUri(),
+                        ]
+                    );
                 }
 
                 if ($isValid && $writer->isEditable($permissionSet)) {
@@ -513,17 +583,19 @@ class PresetsModuleController extends ActionController
             $params[] = [
                 'label' => $permissionSet->permissionSet->getLabel(),
                 'package' => $permissionSet->permissionSet->getSourceInfo()->getPackageName(),
-                'value' => $permissionSet->permissionSet->getIdentifier(),
+                'value' => $permissionSet->identifier,
                 'controls' => [
                     'edit' => $editUrl,
                     'delete' => $deleteUrl,
                     'duplicate' => $duplicateUrl,
                     'download' => $downloadUrl,
+                    'view' => $viewUrl,
                 ],
                 'crdate' => $crdate ?? null,
                 'tstamp' => $tstamp ?? null,
                 'readOnly' => $editUrl === '' && $deleteUrl === '',
                 'isValid' => $permissionSet->permissionSet->getState()->isValid(),
+                'usedIn' => count($this->findBeGroupsUsingPreset($permissionSet->identifier, ['title'])),
             ];
         }
 
@@ -777,5 +849,26 @@ class PresetsModuleController extends ActionController
         );
 
         return YamlFileUtility::getIdentifierFromPath($uniqueFilepath);
+    }
+
+    /**
+     * @param array<int,string> $fields
+     * @return array<array<string,mixed>>
+     */
+    protected function findBeGroupsUsingPreset(string $presetIdentifier, array $fields = ['uid']): array
+    {
+        if ($presetIdentifier === '') {
+            return [];
+        }
+
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('be_groups');
+        return $queryBuilder
+            ->select(...$fields)
+            ->from('be_groups')
+            ->where(
+                $queryBuilder->expr()->inSet('permission_sets', $queryBuilder->createNamedParameter($presetIdentifier))
+            )
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 }

@@ -21,5 +21,11 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Beuser\Controller\BackendUserController::class] = [
             'className' => \T3UX\AclEnhancements\Xclass\BackendUserController::class,
         ];
+
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1759264191] = [
+            'nodeName' => 'presetUsedInField',
+            'priority' => 40,
+            'class' => \T3UX\AclEnhancements\Form\Element\PresetUsedInFieldElement::class,
+        ];
     }
 );

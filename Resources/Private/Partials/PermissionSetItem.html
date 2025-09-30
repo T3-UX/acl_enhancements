@@ -17,6 +17,9 @@
         {permissionSet.value}
     </td>
     <td>
+        {permissionSet.usedIn}
+    </td>
+    <td>
         <f:if condition="{permissionSet.crdate}">
             {permissionSet.crdate -> f:format.date(format="H:i - d.m.Y")}
         </f:if>

@@ -17,6 +17,11 @@
             <core:icon identifier="actions-delete"/>
         </a>
     </f:if>
+    <f:if condition="{permissionSet.controls.view}">
+        <a href="{permissionSet.controls.view}" class="btn btn-default">
+            <core:icon identifier="actions-view"/>
+        </a>
+    </f:if>
     <f:if condition="{permissionSet.controls.duplicate}">
         <a href="{permissionSet.controls.duplicate}" class="btn btn-default">
             <core:icon identifier="actions-duplicate"/>

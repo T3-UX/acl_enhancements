@@ -1,0 +1,11 @@
+{namespace be=TYPO3\CMS\Backend\ViewHelpers}
+<f:layout name="Module"/>
+
+<f:section name="Content">
+    <f:format.raw>{content}</f:format.raw>
+
+    <f:be.pageRenderer
+                       includeCssFiles="{
+        0:'{f:uri.resource(path:\'CSS/acl.css\', extensionName: \'acl_enhancements\')}'
+    }"/>
+</f:section>

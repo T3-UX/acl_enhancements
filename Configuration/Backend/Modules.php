@@ -11,7 +11,7 @@ return [
         'extensionName' => 'AclEnhancements',
         'labels' => 'LLL:EXT:acl_enhancements/Resources/Private/Language/acl_module.xlf',
         'controllerActions' => [
-            PresetsModuleController::class => 'index, create, duplicate, delete, edit, savePreset, clearPermissionsCache, download',
+            PresetsModuleController::class => 'index, create, duplicate, delete, edit, savePreset, download, view',
         ],
         'routes' => [
             '_default' => [
