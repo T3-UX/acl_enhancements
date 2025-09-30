@@ -4,6 +4,10 @@
 ACL Enhancements introduces **permission sets** for TYPO3: file-based, deployable,
 and version-controlled access control configurations.
 
+![ACL](./Resources/Public/Images/Screenshot.png?raw=true "ACL")
+
+This is part of Q3 2025 ACL Budget Idea
+
 Instead of storing backend group permissions only in the database, permission sets
 make ACLs portable, editable, and transparent. They are stored as YAML files and can
 be committed to version control, deployed through CI/CD pipelines, and debugged more easily.
