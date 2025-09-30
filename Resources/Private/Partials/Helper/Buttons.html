@@ -1,0 +1,30 @@
+<td class="col-control">
+    <f:if condition="{count} > 1 && {revisions}">
+        <div class="btn btn-default open-revisions">
+            <core:icon identifier="actions-move-down"/>
+        </div>
+        <div class="btn btn-default close-revisions hidden">
+            <core:icon identifier="actions-move-up"/>
+        </div>
+    </f:if>
+    <f:if condition="{permissionSet.controls.edit}">
+        <a href="{permissionSet.controls.edit}" class="btn btn-default">
+            <core:icon identifier="actions-open"/>
+        </a>
+    </f:if>
+    <f:if condition="{permissionSet.controls.delete}">
+        <a href="{permissionSet.controls.delete}" class="btn btn-default">
+            <core:icon identifier="actions-delete"/>
+        </a>
+    </f:if>
+    <f:if condition="{permissionSet.controls.duplicate}">
+        <a href="{permissionSet.controls.duplicate}" class="btn btn-default">
+            <core:icon identifier="actions-duplicate"/>
+        </a>
+    </f:if>
+    <f:if condition="{permissionSet.controls.download}">
+        <a href="{permissionSet.controls.download}" class="btn btn-default">
+            <core:icon identifier="actions-download"/>
+        </a>
+    </f:if>
+</td>

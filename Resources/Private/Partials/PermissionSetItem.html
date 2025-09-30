@@ -1,0 +1,35 @@
+<tr class="{f:if(condition: permissionSet.isValid, else: 'error')}">
+    <td class="col-2">
+        <f:variable name="label" value="{f:if(condition: permissionSet.isValid, then: permissionSet.label,  else: '<malformed permission set>')}"/>
+
+        <f:if condition="{permissionSet.controls.edit}">
+            <f:then>
+                <a href="{permissionSet.controls.edit}">
+                    <span class="title-line"><strong>{label}</strong></span>
+                </a>
+            </f:then>
+            <f:else>
+                <span class="title-line"><strong>{label}</strong></span>
+            </f:else>
+        </f:if> <i>{f:if(condition: permissionSet.readOnly, then: '[read-only]')}</i>
+    </td>
+    <td class="id-line">
+        {permissionSet.value}
+    </td>
+    <td>
+        <f:if condition="{permissionSet.crdate}">
+            {permissionSet.crdate -> f:format.date(format="H:i - d.m.Y")}
+        </f:if>
+    </td>
+    <td>
+        <f:if condition="{permissionSet.tstamp}">
+            {permissionSet.tstamp -> f:format.date(format="H:i - d.m.Y")}
+        </f:if>
+    </td>
+    <f:if condition="{revisions}">
+        <td>
+            {count}
+        </td>
+    </f:if>
+    <f:render partial="Helper/Buttons" arguments="{_all}"/>
+</tr>

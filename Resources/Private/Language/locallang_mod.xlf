@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" product-name="acl_enhancements">
+        <body>
+            <trans-unit id="module.title">
+                <source>ACL Presets Create (read-only groups)</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

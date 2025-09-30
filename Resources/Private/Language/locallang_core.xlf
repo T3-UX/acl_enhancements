@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:acl_enhancements/Resources/Private/Language/locallang_core.xlf"
+          date="2025-08-09T16:22:32Z"
+          product-name="acl_enhancements">
+        <header/>
+        <body>
+            <trans-unit id="formengine.permissionSetManagedField" resname="formengine.permissionSetManagedField">
+                <source>This field is managed by selected permission sets: </source>
+            </trans-unit>
+            <trans-unit id="formengine.permissionSetManagedRecord" resname="formengine.permissionSetManagedRecord">
+                <source>This group record contains fields managed by selected permission sets. Corresponding fields
+                    preview the calculated values instead of the database value.
+                </source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

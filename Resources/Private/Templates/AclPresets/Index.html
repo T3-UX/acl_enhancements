@@ -1,0 +1,52 @@
+<html
+    xmlns:backend="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    xmlns:beuser="http://typo3.org/ns/TYPO3/CMS/Beuser/ViewHelpers"
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+<f:layout name="Module"/>
+
+<f:section name="Content">
+    <h1 class="acl">
+        <f:translate key="LLL:EXT:acl_enhancements/Resources/Private/Language/locallang_tca.xlf:permissionSets.module.list"/>
+    </h1>
+    <div class="table-fit">
+        <table id="typo3-backend-user-group-list" class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>
+                    <f:translate key="LLL:EXT:acl_enhancements/Resources/Private/Language/locallang_tca.xlf:permissionSets.module.title"/>
+                </th>
+                <th>
+                    <f:translate key="LLL:EXT:acl_enhancements/Resources/Private/Language/locallang_tca.xlf:permissionSets.module.identifier"/>
+                </th>
+                <th>Creation time</th>
+                <th>Modification time</th>
+                <f:if condition="{mergeAsRevisions}">
+                    <th>revisions</th>
+                </f:if>
+                <th class="col-control"><span class="visually-hidden"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels._CONTROL_"/></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <f:for each="{permissionSets}" as="permissionSetGroup">
+                <f:render partial="PermissionSetItem" arguments="{permissionSet: permissionSetGroup.newest, count: permissionSetGroup.revisions, revisions: mergeAsRevisions}"/>
+
+                <f:if condition="{mergeAsRevisions}">
+                    <f:for each="{permissionSetGroup.items}" as="childPermissionSet">
+                        <f:render partial="ChildPermissionSetItem" arguments="{permissionSet: childPermissionSet, revisions: mergeAsRevisions}"/>
+                    </f:for>
+                </f:if>
+            </f:for>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+    </div>
+    <f:be.pageRenderer pageTitle=""
+                       includeCssFiles="{
+        0:'{f:uri.resource(path:\'CSS/acl.css\', extensionName: \'acl_enhancements\')}'
+    }"/>
+</f:section>
+</html>

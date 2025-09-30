@@ -1,0 +1,21 @@
+<tr class="child-permission-set">
+    <td>
+    </td>
+    <td class="id-line">
+        {permissionSet.value}
+    </td>
+    <td>
+        <f:if condition="{permissionSet.crdate}">
+            {permissionSet.crdate -> f:format.date(format="H:i - d.m.Y")}
+        </f:if>
+    </td>
+    <td>
+        <f:if condition="{permissionSet.tstamp}">
+            {permissionSet.tstamp -> f:format.date(format="H:i - d.m.Y")}
+        </f:if>
+    </td>
+    <td>
+    </td>
+
+    <f:render partial="Helper/Buttons" arguments="{_all}"/>
+</tr>

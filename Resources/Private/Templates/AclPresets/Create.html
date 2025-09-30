@@ -1,0 +1,25 @@
+{namespace be=TYPO3\CMS\Backend\ViewHelpers}
+<f:layout name="Module"/>
+
+<f:section name="Content">
+    <f:if condition="{title}">
+        <f:then>
+            <h1 class="acl">{title}</h1>
+        </f:then>
+        <f:else>
+            <h1 class="acl">Permission Preset</h1>
+        </f:else>
+    </f:if>
+    <f:if condition="{subtitle}">
+        <div>
+            <h4>{subtitle}</h4>
+        </div>
+    </f:if>
+
+    <f:format.raw>{content}</f:format.raw>
+
+    <f:be.pageRenderer pageTitle=""
+                       includeCssFiles="{
+        0:'{f:uri.resource(path:\'CSS/acl.css\', extensionName: \'acl_enhancements\')}'
+    }"/>
+</f:section>

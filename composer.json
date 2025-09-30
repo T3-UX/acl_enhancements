@@ -1,0 +1,36 @@
+{
+	"name": "t3-ux/acl_enhancements",
+	"description": "ACL enhancements for TYPO3 CMS",
+	"type": "typo3-cms-extension",
+	"license": [
+		"GPL-2.0-or-later"
+	],
+	"authors": [
+		{
+			"name": "Łukasz Uznański",
+			"email": "extension@macopedia.pl",
+			"role": "Developer"
+		},
+		{
+			"name": "Oskar Dydo",
+			"email": "extension@macopedia.pl",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"typo3/cms-core": "^13.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"T3UX\\AclEnhancements\\": "Classes/"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "acl_enhancements",
+			"app-dir": ".Build",
+			"web-dir": ".Build/public"
+		}
+	},
+	"vendor-dir": ".Build/vendor"
+}

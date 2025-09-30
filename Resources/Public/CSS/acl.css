@@ -1,0 +1,20 @@
+.module-body.t3js-module-body h1:not([class]) {
+    display: none;
+}
+
+.text-end {
+    display: none;
+}
+
+.id-line {
+    margin-top: 0.5em;
+    margin-left: 1em;
+}
+
+.child-permission-set td {
+    color: light-dark(#b7b7b7, #3f3f3f);
+}
+
+tr.error td {
+    color: light-dark(#d21c1c,#956969)
+}

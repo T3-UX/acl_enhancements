@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:acl_enhancements/Resources/Private/Language/locallang_tca.xlf"
+          date="2025-08-09T16:22:32Z"
+          product-name="acl_enhancements">
+        <header/>
+        <body>
+            <trans-unit id="be_groups.permission_sets" resname="be_groups.permission_sets">
+                <source>Permission presets</source>
+            </trans-unit>
+            <trans-unit id="be_groups.permission_sets.description" resname="be_groups.permission_sets.description">
+                <source>Select permission preset(s) to apply dynamically. When saving a record with an active preset, the permission fields will be set to read-only and reflect the applied values of the presets.</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.saveToInstance" resname="permissionSets.saveToInstance">
+                <source>Save to instance</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.openInACLPresetsCreate" resname="permissionSets.openInACLPresetsCreate">
+                <source>Use as permission set template</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.openInEditor" resname="permissionSets.openInEditor">
+                <source>Go back</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.export" resname="permissionSets.export">
+                <source>Export</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.downloadYamlTemplate" resname="permissionSets.downloadYamlTemplate">
+                <source>Download YAML ACL template</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.addNewPreset" resname="permissionSets.export">
+                <source>Add new preset</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.clearCache" resname="permissionSets.export">
+                <source>Clear cache</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.goBack" resname="permissionSets.goBack">
+                <source>Go back</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.delete" resname="permissionSets.goBack">
+                <source>Delete</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.module.identifier" resname="permissionSets.module.identifier">
+                <source>Identifier</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.module.title" resname="permissionSets.module.title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="permissionSets.module.list" resname="permissionSets.module.list">
+                <source>List of presets</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
