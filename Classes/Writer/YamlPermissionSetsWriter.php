@@ -49,6 +49,18 @@ readonly class YamlPermissionSetsWriter implements PermissionSetsWriterInterface
             throw new \RuntimeException('Cannot save empty record');
         }
 
+        if ($newFilename === '' && ($row['label'] ?? '') !== '') {
+            $filenameCandidate = $row['label'];
+
+            if ($this->doesFilenameExist($filenameCandidate)) {
+                $filenameCandidate .= '-' . time();
+            }
+
+            if ($filenameCandidate !== '') {
+                $newFilename = $filenameCandidate;
+            }
+        }
+
         $newFilename = YamlFileUtility::sanitizeFilename($newFilename);
 
         $newFullIdentifier = YamlFileUtility::normalizeIdentifierFromFilename($newFilename);
