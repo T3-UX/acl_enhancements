@@ -119,15 +119,13 @@ readonly class BackendUserGroupPermissionSetApplyHandler
             $finalSitesAndPages = GeneralUtility::trimExplode(',', $finalSitesAndPages, true);
         }
         foreach ($sites as $siteOrPage) {
+            $potentialPid = null;
+
             if (MathUtility::canBeInterpretedAsInteger($siteOrPage)) {
-                try {
-                    // Support for integer site identifiers
-                    $siteOrPage = $this->siteFinder->getSiteByIdentifier((string)$siteOrPage)->getRootPageId();
-                } catch (SiteNotFoundException $e) {
-                }
+                $potentialPid = (int)$siteOrPage;
             } else {
                 try {
-                    $siteOrPage = $this->siteFinder->getSiteByIdentifier((string)$siteOrPage)->getRootPageId();
+                    $potentialPid = $this->siteFinder->getSiteByIdentifier((string)$siteOrPage)->getRootPageId();
                 } catch (SiteNotFoundException) {
                     $this->logger->warning(
                         \sprintf(
@@ -138,7 +136,10 @@ readonly class BackendUserGroupPermissionSetApplyHandler
                     );
                 }
             }
-            $finalSitesAndPages[] = (int)$siteOrPage;
+
+            if (is_int($potentialPid)) {
+                $finalSitesAndPages[] = $potentialPid;
+            }
         }
         $appliedRecord['db_mountpoints'] = implode(',', array_unique($finalSitesAndPages));
         $event->setAppliedRecord($appliedRecord);

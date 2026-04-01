@@ -92,7 +92,7 @@ class BeGroupPermissionSetMapper implements PermissionSetMapperInterface
         $groupMods = is_array($row['groupMods'] ?? '') ? $this->parseGroupMods(implode(',', $row['groupMods'])) : $this->parseGroupMods((string)($row['groupMods'] ?? ''));
         $languages = is_array(($row['allowed_languages'] ?? '')) ? $row['allowed_languages'] : $this->explode((string)($row['allowed_languages'] ?? ''));
         $fileMounts = is_array(($row['file_mountpoints'] ?? '')) ? $row['file_mountpoints'] : $this->csvToIntArray((string)($row['file_mountpoints'] ?? ''));
-        $dbMounts = is_array(($row['db_mountpoints'] ?? '')) ? $row['db_mountpoints'] : $this->csvToIntArray((string)($row['db_mountpoints'] ?? ''));
+        $dbMounts = is_array(($row['db_mountpoints'] ?? '')) ? $row['db_mountpoints'] : $this->dbMountsToIntArray((string)($row['db_mountpoints'] ?? ''));
         $mfaProviders = is_array(($row['mfa_providers'] ?? '')) ? $row['mfa_providers'] : $this->explode((string)($row['mfa_providers'] ?? ''));
         $categories = is_array(($row['category_perms'] ?? '')) ? array_values($row['category_perms']) : $this->csvToIntArray((string)($row['category_perms'] ?? ''));
         $widgets = is_array(($row['availableWidgets'] ?? '')) ? array_values($row['availableWidgets']) : $this->csvToIntArray((string)($row['availableWidgets'] ?? ''));
@@ -130,6 +130,23 @@ class BeGroupPermissionSetMapper implements PermissionSetMapperInterface
         $out = [];
         foreach ($this->explode($csv) as $v) {
             if (is_numeric($v)) {
+                $out[] = (int)$v;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * @return array<int>
+     */
+    private function dbMountsToIntArray(string $csv): array
+    {
+        $out = [];
+        foreach ($this->explode($csv) as $v) {
+            if (is_numeric($v)) {
+                $out[] = (int)$v;
+            } elseif (str_starts_with($v, 'pages_')) {
+                $v = str_replace('pages_', '', $v);
                 $out[] = (int)$v;
             }
         }
