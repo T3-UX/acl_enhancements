@@ -46,6 +46,7 @@ readonly class BackendUserGroupPermissionSetApplyHandler
         'copyFile',
         'moveFile',
         'renameFile',
+        'replaceFile',
         'deleteFile',
         'addFolder',
         'readFolder',

@@ -40,6 +40,7 @@ filePermissions:
   - writeFile
   - addFile
   - renameFile
+  - replaceFile
   - moveFile
   - copyFile
   - deleteFile
